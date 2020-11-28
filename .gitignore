@@ -1,0 +1,4 @@
+/manage.py
+/sandbox/*
+db.sqlite3
+__pycache__
