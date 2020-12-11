@@ -1,0 +1,15 @@
+///////////////////////////////////////////////////////////////////////////////
+// NAME:            Common.js
+//
+// AUTHOR:          Ethan D. Twardy <edtwardy@mtu.edu>
+//
+// DESCRIPTION:     Definitions required by all Models
+//
+// CREATED:         12/11/2020
+//
+// LAST EDITED:     12/11/2020
+////
+
+export const ApiEndpointBaseUrl = '/finances/api/';
+
+///////////////////////////////////////////////////////////////////////////////

@@ -7,11 +7,22 @@
 //
 // CREATED:         11/30/2020
 //
-// LAST EDITED:     12/05/2020
+// LAST EDITED:     12/09/2020
 ////
 
 import './App.css';
 import React from 'react';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from 'react-router-dom';
+
+import {
+    Transaction,
+    GetTransaction
+} from './Transaction.js';
 
 class JsonComponent extends React.Component {
     constructor() {
@@ -22,9 +33,8 @@ class JsonComponent extends React.Component {
     }
 
     componentDidMount() {
-        fetch(this.props.url).then(
-            response => response.json()
-        ).then(data => this.setState({data}));
+        const transaction = new GetTransaction(this.props.url);
+        transaction.complete().then(data => this.setState({data}));
     }
 
     render() {
@@ -34,17 +44,26 @@ class JsonComponent extends React.Component {
     }
 }
 
-function App() {
+export default function App() {
     return (
-        <div>
-          <p><JsonComponent url="/finances/api/users/"/></p>
-          <p><JsonComponent url="/finances/api/banks/"/></p>
-          <p><JsonComponent url="/finances/api/accounts/"/></p>
-          <p><JsonComponent url="/finances/api/funds/"/></p>
-        </div>
+        <JsonComponent url="/finances/api/banks/" />
     );
 }
 
-export default App;
+// export default function App() {
+//     return (
+//         <Router>
+//           <div>
+//             <nav>
+//               <ul>
+//                 <li>
+//                   <Link to="/">Home</Link>
+//                 </li>
+//               </ul>
+//             </nav>
+//           </div>
+//         </Router>
+//     );
+// }
 
 ///////////////////////////////////////////////////////////////////////////////
