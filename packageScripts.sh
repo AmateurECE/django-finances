@@ -21,6 +21,12 @@ Commands:
                          Django app (executed by 'package' command)
   testServer             Spin up a test server using the django test server and
                          the Nginx docker image
+  initializeSandbox      Initialize a Django Project that can provide a sandbox
+                         for testing the application
+  reapplyMigrations      Un-apply, regenerate, and re-apply migrations for the
+                         django-finances application. Requires a sandbox in the
+                         repository. Wipes all data currently in the database,
+                         so be sure it's backed up in another form (e.g. JSON)
 EOF
 
 usage() {
@@ -67,6 +73,14 @@ testServer() {
     django=$!
     trap "killTestServers $django $react" EXIT
     wait
+}
+
+initializeSandbox() {
+    >&2 printf '%s\n' "Unimplemented method: initializeSandbox"
+}
+
+reapplyMigrations() {
+    >&2 printf '%s\n' "Unimplemented method: reapplyMigrations"
 }
 
 case $1 in
