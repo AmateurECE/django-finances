@@ -8,7 +8,7 @@
 //
 // CREATED:         12/07/2020
 //
-// LAST EDITED:     12/15/2020
+// LAST EDITED:     12/16/2020
 ////
 
 import fetch from 'node-fetch';
@@ -17,7 +17,9 @@ async function doFetch(url, method, headers, body=undefined) {
     const response = await fetch(url, {body: JSON.stringify(body), method,
                                        headers});
     if (!response.ok) {
-        throw new Error(response.statusText + '\n' + JSON.stringify(body));
+        const error = new Error(response.statusText);
+        error.number = response.status;
+        throw error;
     }
 
     if (method !== 'DELETE') {

@@ -47,3 +47,13 @@ python3 manage.py migrate
 ```
 python3 manage.py collectstatic
 ```
+* Finally, set up the login redirect. When the SPA detects invalid login
+credentials, it will reroute the current tab to `/login/`. If there is
+currently not a route for that url, add one to your server configuration. For
+example, in NGINX:
+```
+location /login/ {
+    # Pass the request up to my auth server
+    proxy_pass http://localhost:8000;
+}
+```
