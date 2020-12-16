@@ -1,4 +1,5 @@
 recursive-include finances/static *
 recursive-include finances/templates *
 exclude sandbox
-exclude CreateInitialTestData.py
+exclude finances/authentication.py
+exclude manage.py

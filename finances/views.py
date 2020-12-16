@@ -42,17 +42,14 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class BankViewSet(viewsets.ViewSet):
+class BankViewSet(viewsets.ModelViewSet):
+    queryset = Bank.objects.all()
+    serializer_class = BankDetailSerializer
+
     def list(self, request):
         queryset = Bank.objects.all()
         serializer = BankListSerializer(
             queryset, many=True, context={'request': request})
-        return Response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        queryset = Bank.objects.all()
-        bank = get_object_or_404(queryset, pk=pk)
-        serializer = BankDetailSerializer(bank, context={'request': request})
         return Response(serializer.data)
 
 class AccountViewSet(viewsets.ModelViewSet):

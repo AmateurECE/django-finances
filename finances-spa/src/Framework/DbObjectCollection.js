@@ -8,7 +8,7 @@
 //
 // CREATED:         12/09/2020
 //
-// LAST EDITED:     12/11/2020
+// LAST EDITED:     12/14/2020
 ////
 
 import {
@@ -35,21 +35,21 @@ export default class DbObjectCollection {
     // Get the Object with the URL or id provided ('Detail View')
     async get({id, url}) {
         // Ensure either id or url is specified
-        let url;
+        let objectUrl;
         if (typeof id !== 'undefined') {
             if (typeof id === 'number') {
-                url = this.url + id.toString() + '/';
+                objectUrl = this.url + id.toString() + '/';
             } else if (typeof id === 'string') {
-                url = this.url + id + '/';
+                objectUrl = this.url + id + '/';
             }
         } else if (typeof url !== 'undefined') {
-            url = url;
+            objectUrl = url;
         } else {
             throw new Error('Either "id" or "url" must be specified for GET');
         }
 
         // Initiate GET
-        const transaction = new GetTransaction(url);
+        const transaction = new GetTransaction(objectUrl);
         return transaction.complete();
     }
 

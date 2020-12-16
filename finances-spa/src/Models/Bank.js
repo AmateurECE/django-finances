@@ -8,7 +8,7 @@
 //
 // CREATED:         12/09/2020
 //
-// LAST EDITED:     12/11/2020
+// LAST EDITED:     12/12/2020
 ////
 
 import DbObjectCollection from '../Framework/DbObjectCollection.js';
@@ -17,7 +17,7 @@ import {Validator} from '../Framework/Validator.js';
 import {ApiEndpointBaseUrl} from './Common.js';
 
 export class Bank extends DbObject {
-    validator = new Validator({
+    static validator = new Validator({
         validators: {
             url: {
                 test: object => object.hasOwnProperty('url')
@@ -50,8 +50,8 @@ export class Bank extends DbObject {
         forServer: ['url', 'id']
     });
 
-    collection = new DbObjectCollection(ApiEndpointBaseUrl + 'banks/',
-                                        Bank.validator);
+    static collection = new DbObjectCollection(ApiEndpointBaseUrl + 'banks/',
+                                               Bank.validator);
 
     constructor(object) {
         super(Bank.validator);

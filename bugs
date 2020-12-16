@@ -1,0 +1,13 @@
+./finances/models.py: Come up with a better BNF Grammar | id:02265ff55ac9eb2623e3f3e22243d410658d46e2
+./finances-spa/src/Framework/Validator.js: Put the id in the results | id:22aa294a4c118632e2bb1a08c69be6b3a0756eeb
+./finances/views.py: Only get logged in user | id:37ac940abab689a57a7d59daa3399e583add8d2d
+./finances/views.py: Only get accounts for logged in user | id:43a888a4ae4cda3de076334ac803a030d48794b2
+./packageScripts.sh: Run Django application tests | id:55944dc66abcbbca52288879702803ac0c0ea474
+./finances/views.py: Only get funds for logged in user | id:5fecf0fe9ce23d0dde8946867141babd6318cbc8
+./finances/models.py: Allow number to be null? | id:67b655987194cd7b22422ad8d866fc3d11343e11
+./packageScripts.sh: Check package to make sure no unnecessary files exist | id:7d584e86cb7233d1957134f2279c02db6b2284ba
+./packageScripts.sh: reapplyMigrations | id:9105ce63b4924e6ee4383373dad0529af2b5fc33
+./finances/models.py: Interest--not factored, factored proportionally, remaining (unique) | id:ae777062884810113ec263d417f5796109f9cdc7
+./finances/models.py: PaymentSchedule.clean | id:c83cfbec352b5a146cc12571d2bca871d2999684
+./packageScripts.sh: Copy build artifacts to development server | id:e65f07a9dfb9f5748a03b0dc6933a964ef152d66
+./packageScripts.sh: initializeSandbox | id:eeea497bf96a3dde30200412b66d574810e9826c
