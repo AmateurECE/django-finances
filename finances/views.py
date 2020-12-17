@@ -22,8 +22,8 @@ class BankSerializer(serializers.HyperlinkedModelSerializer):
 class AccountSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Account
-        fields = ['url', 'id', 'name', 'user', 'bank', 'periodicInterestRate',
-                  'number', 'accountType', 'fund_set']
+        fields = ['url', 'id', 'name', 'bank', 'periodicInterestRate',
+                  'accountType']
 
 ## Fund Serializer
 class FundSerializer(serializers.HyperlinkedModelSerializer):
@@ -42,9 +42,12 @@ class BankViewSet(viewsets.ModelViewSet):
     serializer_class = BankSerializer
 
 class AccountViewSet(viewsets.ModelViewSet):
-    # TODO: Only get accounts for logged in user
-    queryset = Account.objects.all()
     serializer_class = AccountSerializer
+    def get_queryset(self):
+        return Account.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 class FundViewSet(viewsets.ModelViewSet):
     # TODO: Only get funds for logged in user

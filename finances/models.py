@@ -34,8 +34,6 @@ class Account(models.Model):
     periodicInterestRate = models.FloatField(
         help_text=("The interest rate per period, in percent (NOTE: This is "
                    "neither APY nor APR)"))
-    # TODO: Allow number to be null?
-    number = models.CharField(max_length=80)
     accountType = models.CharField(
         max_length=80,
         choices=[
