@@ -12,16 +12,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'id', 'username', 'first_name', 'last_name', 'email',
                   'last_login', 'date_joined', 'account_set']
 
-## Bank Serializers
-class BankListSerializer(serializers.HyperlinkedModelSerializer):
+## Bank Serializer
+class BankSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Bank
         fields = ['url', 'id', 'name']
-
-class BankDetailSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Bank
-        fields = ['url', 'id', 'name', 'address', 'routingNumber']
 
 ## Account Serializers
 class AccountSerializer(serializers.HyperlinkedModelSerializer):
@@ -44,13 +39,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class BankViewSet(viewsets.ModelViewSet):
     queryset = Bank.objects.all()
-    serializer_class = BankDetailSerializer
-
-    def list(self, request):
-        queryset = Bank.objects.all()
-        serializer = BankListSerializer(
-            queryset, many=True, context={'request': request})
-        return Response(serializer.data)
+    serializer_class = BankSerializer
 
 class AccountViewSet(viewsets.ModelViewSet):
     # TODO: Only get accounts for logged in user

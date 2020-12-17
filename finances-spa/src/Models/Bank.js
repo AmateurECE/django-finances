@@ -8,7 +8,7 @@
 //
 // CREATED:         12/09/2020
 //
-// LAST EDITED:     12/12/2020
+// LAST EDITED:     12/16/2020
 ////
 
 import DbObjectCollection from '../Framework/DbObjectCollection.js';
@@ -33,20 +33,10 @@ export class Bank extends DbObject {
                 test: object => object.hasOwnProperty('name')
                     && typeof object.name === 'string',
                 message: 'Required parameter "name" must be a string'
-            },
-            address: {
-                test: object => object.hasOwnProperty('address')
-                    && typeof object.address === 'string',
-                message: 'Required parameter "address" must be a string'
-            },
-            routingNumber: {
-                test: object => object.hasOwnProperty('routingNumber')
-                    && typeof object.routingNumber === 'string',
-                message: 'Required parameter "routingNumber" must be a string'
             }
         },
         forList: ['name'],
-        forDetail: ['name', 'address', 'routingNumber'],
+        forDetail: ['name'],
         forServer: ['url', 'id']
     });
 
@@ -61,10 +51,6 @@ export class Bank extends DbObject {
         this.id = object.id;
 
         if (Bank.validator.validateForDetail(object)) {
-            this.name = object.name;
-            this.address = object.address;
-            this.routingNumber = object.routingNumber;
-        } else if (Bank.validator.validateForList(object)) {
             this.name = object.name;
         }
     }

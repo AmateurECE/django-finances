@@ -23,8 +23,6 @@ class PaymentSchedule(models.Model):
 
 class Bank(models.Model):
     name = models.CharField(max_length=80)
-    address = models.CharField(max_length=200)
-    routingNumber = models.CharField(max_length=80)
 
     def __str__(self):
         return self.name

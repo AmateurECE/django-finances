@@ -7,7 +7,7 @@
 //
 // CREATED:         12/12/2020
 //
-// LAST EDITED:     12/15/2020
+// LAST EDITED:     12/16/2020
 ////
 
 import {Bank} from './Bank.js';
@@ -18,20 +18,12 @@ function verifyForList(bank) {
     expect(bank).toHaveProperty('name');
 }
 
-function verifyForDetail(bank) {
-    verifyForList(bank);
-    expect(bank).toHaveProperty('address');
-    expect(bank).toHaveProperty('routingNumber');
-}
-
 describe('The Bank', () => {
     test('can be created', () => {
         return Bank.collection.create({
-            name: 'ACME Bank',
-            address: 'One ACME Way',
-            routingNumber: '8675309'
+            name: 'ACME Bank'
         }).then(bank => {
-            verifyForDetail(bank);
+            verifyForList(bank);
         }).catch(error => {
             throw new Error(error);
         });
@@ -53,7 +45,7 @@ describe('The Bank', () => {
             expect(data.length).toBeGreaterThanOrEqual(1);
             return Bank.collection.get({id: data[0].id});
         }).then(data => {
-            verifyForDetail(data);
+            verifyForList(data);
         }).catch(error => {
             throw new Error(error);
         });
@@ -64,7 +56,7 @@ describe('The Bank', () => {
             expect(data.length).toBeGreaterThanOrEqual(1);
             return Bank.collection.get({url: data[0].url});
         }).then(data => {
-            verifyForDetail(data);
+            verifyForList(data);
         }).catch(error => {
             throw new Error(error);
         });
@@ -76,10 +68,10 @@ describe('The Bank', () => {
             return Bank.collection.get({id: data[0].id});
         }).then(data => {
             const bank = new Bank(data);
-            bank.address = 'Two ACME Ways';
+            bank.name = 'Coyote Bank';
             return bank.save();
         }).then(data => {
-            expect(data.address).toBe('Two ACME Ways');
+            expect(data.name).toBe('Coyote Bank');
         }).catch(error => {
             throw new Error(error);
         });

@@ -8,7 +8,7 @@
 #
 # CREATED:          11/28/2020
 #
-# LAST EDITED:      12/15/2020
+# LAST EDITED:      12/16/2020
 ###
 
 read -r -d '' USAGE <<EOF
@@ -57,8 +57,7 @@ buildSpa() {
 }
 
 killTestServers() {
-    kill $1
-    kill $2
+    kill $@
     docker stop finances
 }
 
@@ -91,8 +90,10 @@ initializeSandbox() {
 }
 
 reapplyMigrations() {
-    # TODO: reapplyMigrations
-    >&2 printf '%s\n' "Unimplemented method: reapplyMigrations"
+    python3 manage.py migrate finances zero
+    rm -rf finances/migrations
+    python3 manage.py makemigrations finances
+    python3 manage.py migrate
 }
 
 runTests() {
