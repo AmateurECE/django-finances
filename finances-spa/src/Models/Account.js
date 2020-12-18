@@ -15,7 +15,7 @@ import DbObject from '../Framework/DbObject.js';
 import {Validator} from '../Framework/Validator.js';
 import {ApiEndpointBaseUrl} from './Common.js';
 
-export class Account extends DbObject {
+export default class Account extends DbObject {
     static validator = new Validator({
         validators: {
             url: {

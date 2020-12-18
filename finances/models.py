@@ -42,8 +42,8 @@ class Account(models.Model):
         ])
 
     def __str__(self):
-        return '{} ({}, Acct: ***{})'.format(
-            self.name, self.bank.name, self.number[-4:])
+        return '{} ({}, {})'.format(
+            self.name, self.bank.name, self.accountType)
 
 class Fund(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)

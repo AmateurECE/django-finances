@@ -10,8 +10,8 @@
 // LAST EDITED:     12/17/2020
 ////
 
-import {Bank} from './Bank.js';
-import {Account} from './Account.js';
+import Bank from './Bank.js';
+import Account from './Account.js';
 
 function verifyForServer(account) {
     expect(account).toHaveProperty('id');

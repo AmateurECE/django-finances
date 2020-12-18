@@ -8,7 +8,7 @@
 //
 // CREATED:         12/09/2020
 //
-// LAST EDITED:     12/16/2020
+// LAST EDITED:     12/17/2020
 ////
 
 import DbObjectCollection from '../Framework/DbObjectCollection.js';
@@ -16,7 +16,7 @@ import DbObject from '../Framework/DbObject.js';
 import {Validator} from '../Framework/Validator.js';
 import {ApiEndpointBaseUrl} from './Common.js';
 
-export class Bank extends DbObject {
+export default class Bank extends DbObject {
     static validator = new Validator({
         validators: {
             url: {

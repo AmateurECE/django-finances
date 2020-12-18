@@ -7,10 +7,10 @@
 //
 // CREATED:         12/12/2020
 //
-// LAST EDITED:     12/16/2020
+// LAST EDITED:     12/17/2020
 ////
 
-import {Bank} from './Bank.js';
+import Bank from './Bank.js';
 
 function verifyForList(bank) {
     expect(bank).toHaveProperty('id');

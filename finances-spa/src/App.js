@@ -7,7 +7,7 @@
 //
 // CREATED:         11/30/2020
 //
-// LAST EDITED:     12/16/2020
+// LAST EDITED:     12/17/2020
 ////
 
 import './App.css';
@@ -18,43 +18,77 @@ import {
     Route,
     Link
 } from 'react-router-dom';
-import { Bank } from './Models/Bank.js';
+import Account from './Models/Account.js';
+import Bank from './Models/Bank.js';
+import AccountCreationForm from './Forms/AccountCreationForm.js';
 
 // This is the URL we redirect to when we detect invalid login credentials.
 const LOGIN_REDIRECT_URL = '/login/';
+
+const ACCOUNT_SETUP = 1;
 
 export default class App extends React.Component {
     constructor() {
         super();
         this.state = {
             ready: false,
-            userSetupNecessary: false
+            userSetup: []
         };
     }
 
+    getFormFields(setup, callback) {
+        if (ACCOUNT_SETUP === setup) {
+            return (
+                <AccountCreationForm
+                  onSubmit={callback}
+                  banks={this.banks}
+                />
+            );
+        }
+
+        console.log(setup);
+        throw Error('getFormFields invoked without valid argument!');
+    }
+
     componentDidMount() {
-        Bank.collection.all().then(data => {
-            this.banks = data;
+        Account.collection.all().then(data => {
+            this.accounts = data;
             if (data.length === 0) {
-                this.setState({userSetupNecessary: true});
+                console.log('Pushing account setup');
+                return Bank.collection.all().then(data => {
+                    this.banks = data;
+                    this.state.userSetup.push(ACCOUNT_SETUP);
+                });
             }
-            this.setState({ready: true});
+            return new Promise((resolve, reject) => resolve());
         }).catch(error => {
             if (error.number === 403) {
                 window.location = LOGIN_REDIRECT_URL;
             } else {
                 throw error;
             }
+        }).finally(() => {
+            this.setState({ready: true});
         });
     }
 
     renderLoading() {
+        // TODO: Update renderLoading()
         return (
             <h1>Loading...</h1>
         );
     }
 
+    renderUserSetup() {
+        const formFields = this.getFormFields(
+            this.state.userSetup[0],
+            event => this.setState({userSetup: this.state.userSetup.shift()})
+        );
+        return formFields;
+    }
+
     renderNav() {
+        // TODO: Update renderNav()
         return (
             <Router>
               <div>
@@ -75,14 +109,9 @@ export default class App extends React.Component {
         );
     }
 
-    renderUserSetup() {
-        // TODO: renderUserSetup()
-        return ({});
-    }
-
     renderHomepage() {
         // TODO: renderHomepage()
-        return ({});
+        return (null);
     }
 
     render() {
@@ -90,17 +119,17 @@ export default class App extends React.Component {
             return this.renderLoading();
         }
 
-        const nav = this.renderNav();
-        let page;
-        if (this.state.userSetupNecessary) {
-            page = this.renderUserSetup();
-        } else {
-            page = this.renderHomepage();
+        if (this.state.userSetup.length > 0) {
+            return this.renderUserSetup();
         }
 
+        const nav = this.renderNav();
+        const page = this.renderHomepage();
         return (
-            nav,
-            page
+            <div>
+              {nav}
+              {page}
+            </div>
         );
     }
 }
