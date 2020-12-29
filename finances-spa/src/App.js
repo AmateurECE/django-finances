@@ -7,10 +7,10 @@
 //
 // CREATED:         11/30/2020
 //
-// LAST EDITED:     12/17/2020
+// LAST EDITED:     12/29/2020
 ////
 
-import './App.css';
+import './App.scss';
 import React from 'react';
 import {
     BrowserRouter as Router,
@@ -39,14 +39,18 @@ export default class App extends React.Component {
     getFormFields(setup, callback) {
         if (ACCOUNT_SETUP === setup) {
             return (
-                <AccountCreationForm
-                  onSubmit={callback}
-                  banks={this.banks}
-                />
+                <div className="">
+                  <h1>Welcome!</h1>
+                  <p>Before we begin, please tell me a little bit about your
+                  existing bank accounts.</p>
+                  <AccountCreationForm
+                    onSubmit={callback}
+                    banks={this.banks}
+                  />
+                </div>
             );
         }
 
-        console.log(setup);
         throw Error('getFormFields invoked without valid argument!');
     }
 
@@ -54,7 +58,6 @@ export default class App extends React.Component {
         Account.collection.all().then(data => {
             this.accounts = data;
             if (data.length === 0) {
-                console.log('Pushing account setup');
                 return Bank.collection.all().then(data => {
                     this.banks = data;
                     this.state.userSetup.push(ACCOUNT_SETUP);
@@ -84,7 +87,11 @@ export default class App extends React.Component {
             this.state.userSetup[0],
             event => this.setState({userSetup: this.state.userSetup.shift()})
         );
-        return formFields;
+        return (
+            <div className="initializer-form">
+              {formFields}
+            </div>
+        );
     }
 
     renderNav() {
@@ -115,21 +122,22 @@ export default class App extends React.Component {
     }
 
     render() {
+        let page;
         if (!this.state.ready) {
-            return this.renderLoading();
+            page = this.renderLoading();
+        } else if (this.state.userSetup.length > 0) {
+            page = this.renderUserSetup();
+        } else {
+            page = this.renderHomepage();
         }
-
-        if (this.state.userSetup.length > 0) {
-            return this.renderUserSetup();
-        }
-
-        const nav = this.renderNav();
-        const page = this.renderHomepage();
         return (
-            <div>
-              {nav}
+            <main>
               {page}
-            </div>
+              <footer>
+                <p>Copyright &copy; 2020 Ethan D. Twardy. All rights
+                  reserved.</p>
+              </footer>
+            </main>
         );
     }
 }

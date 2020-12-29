@@ -8,7 +8,7 @@
 #
 # CREATED:          11/28/2020
 #
-# LAST EDITED:      12/16/2020
+# LAST EDITED:      12/29/2020
 ###
 
 read -r -d '' USAGE <<EOF
@@ -20,7 +20,8 @@ Commands:
   buildSpa               Build the SPA and copy the build artifacts to the
                          Django app (executed by 'package' command)
   testServer             Spin up a test server using the django test server and
-                         the Nginx docker image
+                         the Nginx docker image. With --fixture, uses the test
+                         fixture fixtures/empty.json.bz2.
   initializeSandbox      Initialize a Django Project that can provide a sandbox
                          for testing the application
   reapplyMigrations      Un-apply, regenerate, and re-apply migrations for the
@@ -56,11 +57,6 @@ buildSpa() {
     # TODO: Copy build artifacts to development server
 }
 
-killTestServers() {
-    kill $@
-    docker stop finances
-}
-
 testServer() {
     rootDirectory=$(realpath .)/static
     confFile=$(realpath .)/development-site.conf
@@ -71,14 +67,12 @@ testServer() {
 	   -v "`realpath .`/log:/var/log/nginx" \
 	   nginx:latest
 
-    # Enable auth for the test server
-    echo 'Y' > sandbox/config/auth
-    python3 manage.py runserver &
-    django=$!
-    $(cd finances-spa && npm run start) &
-    react=$!
-    trap "killTestServers $django $react" EXIT
-    wait
+    trap "docker stop finances" EXIT
+    if [[ "x$1" = "x--fixture" ]]; then
+        python3 manage.py testserver fixtures/empty.json.bz2
+    else
+        python3 manage.py runserver
+    fi
 }
 
 initializeSandbox() {
@@ -100,9 +94,8 @@ runTests() {
     # TODO: Run Django application tests
 
     # Start the django test server with auth and logging disabled
-    echo 'N' > sandbox/config/auth
     echo 'N' > sandbox/config/logging
-    python3 manage.py testserver fixtures/empty.json &
+    python3 manage.py testserver fixtures/empty.json.bz2 &
     django=$!
 
     # Run npm tests
@@ -112,14 +105,16 @@ runTests() {
 
 createTestFixture() {
     python3 manage.py dumpdata --natural-foreign --natural-primary \
-             --format=json | bzip2 -c > $1
+             --format=json | bzip2 -c > fixtures/$1.json.bz2
 }
 
 if [[ ! -d 'finances-spa' || ! -d 'sandbox' ]]; then
     >&2 printf '%s\n' "This script must be run from the project root directory"
 fi
 
-case $1 in
+command=$1
+shift
+case $command in
     package)
         package
         ;;
@@ -127,7 +122,7 @@ case $1 in
         buildSpa
         ;;
     testServer)
-        testServer
+        testServer $@
         ;;
     initializeSandbox)
         initializeSandbox
@@ -139,7 +134,7 @@ case $1 in
         runTests
         ;;
     createTestFixture)
-        createTestFixture $2
+        createTestFixture $@
         ;;
     *)
         usage

@@ -7,7 +7,7 @@
 //
 // CREATED:         12/16/2020
 //
-// LAST EDITED:     12/17/2020
+// LAST EDITED:     12/29/2020
 ////
 
 import DbObjectCollection from '../Framework/DbObjectCollection.js';
@@ -66,12 +66,12 @@ export default class Account extends DbObject {
         this.url = object.url;
         this.id = object.id;
 
-        if (Account.validate.validateForDetail(object)) {
+        if (Account.validator.validateForDetail(object)) {
             this.name = object.name;
             this.bank = object.bank;
             this.periodicInterestRate = object.periodicInterestRate;
             this.accountType = object.accountType;
-        } else if (Account.validate.validateForList(object)) {
+        } else if (Account.validator.validateForList(object)) {
             this.name = object.name;
             this.bank = object.bank;
             this.accountType = object.accountType;

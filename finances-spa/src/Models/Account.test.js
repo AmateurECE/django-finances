@@ -7,16 +7,19 @@
 //
 // CREATED:         12/16/2020
 //
-// LAST EDITED:     12/17/2020
+// LAST EDITED:     12/29/2020
 ////
 
 import Bank from './Bank.js';
 import Account from './Account.js';
+import { login } from './TestLogin.js';
+import DbObject from '../Framework/DbObject.js';
+import DbObjectCollection from '../Framework/DbObjectCollection.js';
+import { JWTAuthenticator } from '../Framework/Authentication.js';
 
 function verifyForServer(account) {
     expect(account).toHaveProperty('id');
     expect(account).toHaveProperty('url');
-    expect(account).toHaveProperty('fund_set');
 }
 
 function verifyForList(account) {
@@ -29,6 +32,15 @@ function verifyForDetail(account) {
     verifyForList(account);
     expect(account).toHaveProperty('periodicInterestRate');
 }
+
+beforeAll(() => {
+    return login().then(credentials => {
+        DbObject.authenticator = new JWTAuthenticator(
+            credentials.access, credentials.refresh);
+        DbObjectCollection.authenticator = new JWTAuthenticator(
+            credentials.access, credentials.refresh);
+    }).catch(error => {throw error;});
+});
 
 describe('The Account', () => {
     test('can be created', () => {
@@ -46,7 +58,7 @@ describe('The Account', () => {
             verifyForServer(account);
             verifyForDetail(account);
         }).catch(error => {
-            throw new Error(error);
+            throw error;
         });
     });
 });

@@ -7,16 +7,29 @@
 //
 // CREATED:         12/12/2020
 //
-// LAST EDITED:     12/17/2020
+// LAST EDITED:     12/29/2020
 ////
 
 import Bank from './Bank.js';
+import { login } from './TestLogin.js';
+import DbObject from '../Framework/DbObject.js';
+import DbObjectCollection from '../Framework/DbObjectCollection.js';
+import { JWTAuthenticator } from '../Framework/Authentication.js';
 
 function verifyForList(bank) {
     expect(bank).toHaveProperty('id');
     expect(bank).toHaveProperty('url');
     expect(bank).toHaveProperty('name');
 }
+
+beforeAll(() => {
+    return login().then(credentials => {
+        DbObject.authenticator = new JWTAuthenticator(
+            credentials.access, credentials.refresh);
+        DbObjectCollection.authenticator = new JWTAuthenticator(
+            credentials.access, credentials.refresh);
+    }).catch(error => {throw error;});
+});
 
 describe('The Bank', () => {
     test('can be created', () => {
@@ -25,7 +38,7 @@ describe('The Bank', () => {
         }).then(bank => {
             verifyForList(bank);
         }).catch(error => {
-            throw new Error(error);
+            throw error;
         });
     });
 
@@ -36,7 +49,7 @@ describe('The Bank', () => {
                 verifyForList(bank);
             });
         }).catch(error => {
-            throw new Error(error);
+            throw error;
         });
     });
 
@@ -47,7 +60,7 @@ describe('The Bank', () => {
         }).then(data => {
             verifyForList(data);
         }).catch(error => {
-            throw new Error(error);
+            throw error;
         });
     });
 
@@ -58,7 +71,7 @@ describe('The Bank', () => {
         }).then(data => {
             verifyForList(data);
         }).catch(error => {
-            throw new Error(error);
+            throw error;
         });
     });
 
@@ -73,7 +86,7 @@ describe('The Bank', () => {
         }).then(data => {
             expect(data.name).toBe('Coyote Bank');
         }).catch(error => {
-            throw new Error(error);
+            throw error;
         });
     });
 
@@ -85,7 +98,7 @@ describe('The Bank', () => {
             const bank = new Bank(data);
             return bank.delete();
         }).catch(error => {
-            throw new Error(error);
+            throw error;
         });
     });
 });

@@ -8,7 +8,7 @@
 //
 // CREATED:         12/09/2020
 //
-// LAST EDITED:     12/14/2020
+// LAST EDITED:     12/29/2020
 ////
 
 import {
@@ -17,6 +17,9 @@ import {
 } from './Transaction.js';
 
 export default class DbObjectCollection {
+    // Authenticator used for testing. Set by the test setup methods.
+    static authenticator = undefined;
+
     constructor(url, validator) {
         this.url = url;
         this.validator = validator;
@@ -28,7 +31,8 @@ export default class DbObjectCollection {
         this.validator.validate(query, {detail: true, server: true});
 
         // Initiate POST
-        const transaction = new PostTransaction(this.url, query);
+        const transaction = new PostTransaction(
+            this.url, query, DbObjectCollection.authenticator);
         return transaction.complete();
     }
 
@@ -49,13 +53,15 @@ export default class DbObjectCollection {
         }
 
         // Initiate GET
-        const transaction = new GetTransaction(objectUrl);
+        const transaction = new GetTransaction(
+            objectUrl, DbObjectCollection.authenticator);
         return transaction.complete();
     }
 
     // Get all Object objects available to this client. This is a 'List View'
     async all() {
-        return new GetTransaction(this.url).complete();
+        return new GetTransaction(
+            this.url, DbObjectCollection.authenticator).complete();
     }
 }
 

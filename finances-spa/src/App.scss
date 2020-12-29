@@ -1,0 +1,103 @@
+
+:root {
+    --background-dark: #343a40;
+    --background-light: white;
+    --text-dark: white;
+
+    --green: #36f53f;
+    --gray: #888;
+}
+
+main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.MuiFormControl-root {
+    display: flex !important;
+}
+
+.related-input-group-control {
+    display: flex;
+    flex-direction: row;
+}
+
+.related-input-group-control .MuiFormControl-root:first-child {
+    margin-right: 1rem;
+}
+
+.related-input-group-control .MuiFormControl-root {
+    display: inline-flex !important;
+    flex: 1;
+}
+
+.related-input-group-control, .MuiFormControl-root, .MuiAutocomplete-root {
+    margin-bottom: 0.5rem !important;
+}
+
+.MuiInput-underline:after {
+    border-bottom: 2px solid var(--green) !important;
+}
+
+.initializer-form {
+    margin-top: 5rem;
+    padding: 1.5rem;
+    background-color: var(--green);
+    border-radius: 15px;
+    border: 0px solid;
+}
+
+.submit-group {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn {
+    padding: 0.5rem 2rem;
+    font-size: 1rem;
+}
+
+footer p {
+    margin: 0.3rem 0;
+    text-align: center;
+    font-size: 0.7rem;
+}
+
+@media(prefers-color-scheme: dark) {
+    body {
+        background-color: var(--background-dark) !important;
+        color: var(--text-dark) !important;
+    }
+
+    .MuiFormLabel-root, .MuiSelect-root, .MuiSelect-icon, .MuiInputBase-input {
+        color: white !important;
+    }
+
+    .MuiInput-underline::before {
+        border-color: white !important;
+    }
+
+    .initializer-form {
+        background-color: var(--gray);
+    }
+
+    .initializer-form h1 {
+        color: var(--green);
+    }
+
+    .btn {
+        background-color: var(--green);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        margin-top: 0.5rem;
+    }
+}
+
+@media(min-width: 568px) {
+    .initializer-form {
+        max-width: 40rem;
+    }
+}
