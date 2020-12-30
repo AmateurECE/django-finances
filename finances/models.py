@@ -47,7 +47,7 @@ class Account(models.Model):
 
 class Fund(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    description = models.CharField(max_length=80)
+    description = models.CharField(max_length=80, blank=True, null=True)
     target = models.IntegerField(blank=True, null=True)
     # TODO: Interest--not factored, factored proportionally, remaining (unique)
 

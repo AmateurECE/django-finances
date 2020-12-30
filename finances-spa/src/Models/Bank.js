@@ -8,7 +8,7 @@
 //
 // CREATED:         12/09/2020
 //
-// LAST EDITED:     12/28/2020
+// LAST EDITED:     12/30/2020
 ////
 
 import DbObjectCollection from '../Framework/DbObjectCollection.js';
@@ -20,18 +20,15 @@ export default class Bank extends DbObject {
     static validator = new Validator({
         validators: {
             url: {
-                test: object => object.hasOwnProperty('url')
-                    && object.url !== '',
+                test: object => object.url !== '',
                 message: '"url" parameter is not present or not empty'
             },
             id: {
-                test: object => object.hasOwnProperty('id')
-                    && typeof object.id === 'number',
+                test: object => typeof object.id === 'number',
                 message: '"id" parameter is not present or not a number'
             },
             name: {
-                test: object => object.hasOwnProperty('name')
-                    && typeof object.name === 'string',
+                test: object => typeof object.name === 'string',
                 message: 'Required parameter "name" must be a string'
             }
         },

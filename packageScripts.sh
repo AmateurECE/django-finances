@@ -8,7 +8,7 @@
 #
 # CREATED:          11/28/2020
 #
-# LAST EDITED:      12/29/2020
+# LAST EDITED:      12/30/2020
 ###
 
 read -r -d '' USAGE <<EOF
@@ -68,7 +68,8 @@ testServer() {
 	   nginx:latest
 
     trap "docker stop finances" EXIT
-    if [[ "x$1" = "x--fixture" ]]; then
+    echo 'Y' > sandbox/config/logging
+    if [[ ! -z "$1" && "$1" = "--fixture" ]]; then
         python3 manage.py testserver fixtures/empty.json.bz2
     else
         python3 manage.py runserver

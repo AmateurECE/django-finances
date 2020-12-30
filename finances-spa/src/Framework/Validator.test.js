@@ -7,10 +7,10 @@
 //
 // CREATED:         12/11/2020
 //
-// LAST EDITED:     12/11/2020
+// LAST EDITED:     12/30/2020
 ////
 
-import Validator from './Validator.js';
+import { Validator } from './Validator.js';
 
 describe('The Validator cannot be constructed', () => {
     test('without validators or at least one of the for* specifiers', () => {

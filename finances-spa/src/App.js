@@ -7,7 +7,7 @@
 //
 // CREATED:         11/30/2020
 //
-// LAST EDITED:     12/29/2020
+// LAST EDITED:     12/30/2020
 ////
 
 import './App.scss';
@@ -20,12 +20,16 @@ import {
 } from 'react-router-dom';
 import Account from './Models/Account.js';
 import Bank from './Models/Bank.js';
+import Fund from './Models/Fund.js';
+
 import AccountCreationForm from './Forms/AccountCreationForm.js';
+import FundCreationForm from './Forms/FundCreationForm.js';
 
 // This is the URL we redirect to when we detect invalid login credentials.
 const LOGIN_REDIRECT_URL = '/login/';
 
 const ACCOUNT_SETUP = 1;
+const FUND_SETUP = 2;
 
 export default class App extends React.Component {
     constructor() {
@@ -45,8 +49,17 @@ export default class App extends React.Component {
                   existing bank accounts.</p>
                   <AccountCreationForm
                     onSubmit={callback}
-                    banks={this.banks}
-                  />
+                    banks={this.banks} />
+                </div>
+            );
+        } else if (FUND_SETUP === setup) {
+            return (
+                <div className="">
+                  <h1>Next, the Funds</h1>
+                  <p>Now, tell me about something you're saving up for.</p>
+                  <FundCreationForm
+                    onSubmit={callback}
+                    accounts={this.accounts} />
                 </div>
             );
         }
@@ -55,17 +68,27 @@ export default class App extends React.Component {
     }
 
     componentDidMount() {
-        Account.collection.all().then(data => {
-            this.accounts = data;
+        // First, attempt to retrieve the funds.
+        Fund.collection.all().then(data => {
+            this.funds = data;
             if (data.length === 0) {
-                return Bank.collection.all().then(data => {
-                    this.banks = data;
-                    this.state.userSetup.push(ACCOUNT_SETUP);
+                // If there are no funds, trigger FUND_SETUP. Retrieve accounts
+                this.state.userSetup.unshift(FUND_SETUP);
+                return Account.collection.all().then(data => {
+                    this.accounts = data;
+                    // If there are no accounts, trigger ACCOUNT_SETUP.
+                    if (data.length === 0) {
+                        return Bank.collection.all().then(data => {
+                            this.banks = data;
+                            this.state.userSetup.unshift(ACCOUNT_SETUP);
+                        });
+                    }
+                    return {};
                 });
             }
-            return new Promise((resolve, reject) => resolve());
+            return {};
         }).catch(error => {
-            if (error.number === 403) {
+            if (error.number === 403 || error.number === 401) {
                 window.location = LOGIN_REDIRECT_URL;
             } else {
                 throw error;
@@ -85,7 +108,7 @@ export default class App extends React.Component {
     renderUserSetup() {
         const formFields = this.getFormFields(
             this.state.userSetup[0],
-            event => this.setState({userSetup: this.state.userSetup.shift()})
+            event => this.setState({userSetup: this.state.userSetup.slice(1)})
         );
         return (
             <div className="initializer-form">

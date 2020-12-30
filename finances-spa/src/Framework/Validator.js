@@ -8,7 +8,7 @@
 //
 // CREATED:         12/11/2020
 //
-// LAST EDITED:     12/11/2020
+// LAST EDITED:     12/30/2020
 ////
 
 export class ValidationError extends Error {
@@ -49,7 +49,8 @@ export class Validator {
 
         let errors = [];
         for (let i = 0; i < this.validators.length; ++i) {
-            if (!this.validators[list[i]].test(object)) {
+            if (object.hasOwnProperty(list[i])
+                && this.validators[list[i]].test(object)) {
                 // TODO: Put the id in the results
                 errors.push(this.validators[list[i]].message);
             }

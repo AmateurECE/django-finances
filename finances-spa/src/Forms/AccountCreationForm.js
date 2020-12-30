@@ -7,12 +7,13 @@
 //
 // CREATED:         12/17/2020
 //
-// LAST EDITED:     12/21/2020
+// LAST EDITED:     12/30/2020
 ////
 
 import React from 'react';
 import {AutocompleteTextInput} from './Common.js';
 import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
 
 // Models
 import Bank from '../Models/Bank.js';
@@ -27,22 +28,25 @@ export default class AccountCreationForm extends React.Component {
             bank: '',
             accountType: ''
         };
+
         this.handleSubmit = this.handleSubmit.bind(this);
+
         this.nameChange = this.handleChange.bind(this, 'name');
         this.bankChange = this.handleChange.bind(this, 'bank');
         this.accountTypeChange = this.handleChange.bind(this, 'accountType');
+    }
+
+    handleChange(key, event) {
+        this.setState(state => state[key] = event.target.value);
     }
 
     handleSubmit(event) {
         // Prepare Bank
         let createNewBank = true;
         let url;
-        console.log(this.props.banks);
-        console.log(this.state.bank);
         for (let id in this.props.banks) {
             const bank = this.props.banks[id];
             if (bank.name === this.state.bank) {
-                console.log('Not necessary');
                 createNewBank = false;
                 url = bank.url;
                 break;
@@ -62,7 +66,7 @@ export default class AccountCreationForm extends React.Component {
             // }
 
             // TODO: Create initial transaction for current balance
-            console.log(this.state.name);
+            // TODO: Create (unallocated) fund
             Account.collection.create({
                 name: this.state.name,
                 bank: data.url,
@@ -77,11 +81,6 @@ export default class AccountCreationForm extends React.Component {
         }
 
         event.preventDefault();
-    }
-
-    handleChange(key, event) {
-        console.log(key, event.target.value);
-        this.setState(state => state[key] = event.target.value);
     }
 
     render() {
@@ -112,8 +111,8 @@ export default class AccountCreationForm extends React.Component {
               <TextField
                 onChange={this.accountTypeChange}
                 label="Account Type" select defaultValue=''>
-                  <option value="CHECKING">Checking</option>
-                  <option value="SAVINGS">Savings</option>
+                  <MenuItem value="CHECKING">Checking</MenuItem>
+                  <MenuItem value="SAVINGS">Savings</MenuItem>
               </TextField>
               {/* <label>Current Balance */}
               {/*   <input type="number" name="currentBalance" step="0.01" */}

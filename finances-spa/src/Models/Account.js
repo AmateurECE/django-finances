@@ -7,7 +7,7 @@
 //
 // CREATED:         12/16/2020
 //
-// LAST EDITED:     12/29/2020
+// LAST EDITED:     12/30/2020
 ////
 
 import DbObjectCollection from '../Framework/DbObjectCollection.js';
@@ -19,34 +19,28 @@ export default class Account extends DbObject {
     static validator = new Validator({
         validators: {
             url: {
-                test: object => object.hasOwnProperty('url')
-                    && object.url !== '',
+                test: obj => obj.url !== '',
                 message: '"url" parameter is not present or not empty'
             },
             id: {
-                test: object => object.hasOwnProperty('id')
-                    && typeof object.id === 'number',
+                test: obj => typeof obj.id === 'number',
                 message: '"id" parameter is not present or not a number'
             },
             name: {
-                test: object => object.hasOwnProperty('name')
-                    && typeof object.name === 'string',
+                test: obj => typeof obj.name === 'string',
                 message: '"name" parameter is not present or not a string'
             },
             bank: {
-                test: object => object.hasOwnProperty('bank')
-                    && typeof object.bank === 'string' && object.bank,
+                test: obj => typeof obj.bank === 'string' && obj.bank,
                 message: '"bank" parameter must be the URL of an existing bank'
             },
             periodicInterestRate: {
-                test: object => object.hasOwnProperty('periodicInterestRate')
-                    && typeof object.periodicInterestRate === 'number',
+                test: obj => typeof obj.periodicInterestRate === 'number',
                 message: '"periodicInterestRate" must be present and a number'
             },
             accountType: {
-                test: object => object.hasOwnProperty('accountType')
-                    && (object.accountType === 'CHECKING'
-                        || object.accountType === 'SAVINGS'),
+                test: obj => obj.accountType === 'CHECKING'
+                    || obj.accountType === 'SAVINGS',
                 message: '"accountType" must either be "SAVINGS" or "CHECKING"'
             }
         },
