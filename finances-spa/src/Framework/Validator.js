@@ -8,7 +8,7 @@
 //
 // CREATED:         12/11/2020
 //
-// LAST EDITED:     12/30/2020
+// LAST EDITED:     01/04/2021
 ////
 
 export class ValidationError extends Error {
@@ -52,6 +52,7 @@ export class Validator {
             if (object.hasOwnProperty(list[i])
                 && this.validators[list[i]].test(object)) {
                 // TODO: Put the id in the results
+                // TODO: Throw exception here
                 errors.push(this.validators[list[i]].message);
             }
         }

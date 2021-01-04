@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// NAME:            Fields.js
+// NAME:            Common.js
 //
 // AUTHOR:          Ethan D. Twardy <edtwardy@mtu.edu>
 //
@@ -7,7 +7,7 @@
 //
 // CREATED:         12/17/2020
 //
-// LAST EDITED:     12/30/2020
+// LAST EDITED:     01/04/2021
 ////
 
 import TextField from '@material-ui/core/TextField';

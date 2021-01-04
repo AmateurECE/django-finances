@@ -8,10 +8,12 @@ from rest_framework_simplejwt.views import (
 
 # Routers provide an easy way of automatically determining the URL conf
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
+router.register(r'users', views.UserViewSet, basename='user')
 router.register(r'banks', views.BankViewSet, basename='bank')
 router.register(r'accounts', views.AccountViewSet, basename='account')
-router.register(r'funds', views.FundViewSet)
+router.register(r'funds', views.FundViewSet, basename='fund')
+router.register(r'transactions', views.TransactionViewSet,
+                basename='transaction')
 
 urlpatterns = [
     path('api/', include(router.urls)),

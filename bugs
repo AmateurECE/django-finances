@@ -1,19 +1,15 @@
-./finances/models.py: Come up with a better BNF Grammar | id:02265ff55ac9eb2623e3f3e22243d410658d46e2
 ./finances-spa/src/Forms/FundCreationForm.js: Create transaction for initial balance | id:031bee9e971f7e7a16aa3bda53bd764fb8832751
 ./finances-spa/src/App.js: renderHomepage() | id:0d550100c664ae5e362f2acc792ad3c879f6274d
 ./finances-spa/src/Models/Fund.js: This will change when formula targets are integrated | id:1e76ef968ade107e84e323f281d6c5054b651bea
 ./finances-spa/src/Framework/Validator.js: Put the id in the results | id:22aa294a4c118632e2bb1a08c69be6b3a0756eeb
-./finances/views.py: Only get logged in user | id:37ac940abab689a57a7d59daa3399e583add8d2d
-./finances-spa/src/Forms/AccountCreationForm.js: Create initial transaction for current balance | id:47a2e16224c79659fd752b9d939fca07cdf7a3c3
 ./packageScripts.sh: Run Django application tests | id:55944dc66abcbbca52288879702803ac0c0ea474
 ./finances-spa/src/App.js: Update renderLoading() | id:5e432a8d55e35b158955e4ae8e91341b5c1ec012
-./finances/views.py: Only get funds for logged in user | id:5fecf0fe9ce23d0dde8946867141babd6318cbc8
+./finances/models.py: ScheduledPayment Model | id:65027ac7c62a8995b35d251a77d6e3cf1480377c
 ./finances-spa/src/Forms/AccountCreationForm.js: periodicInterestRate | id:65275c724c993ac1c49b1887c2f269567a488e98
 ./packageScripts.sh: Check package to make sure no unnecessary files exist | id:7d584e86cb7233d1957134f2279c02db6b2284ba
 ./finances-spa/src/Forms/AccountCreationForm.js: Add onChange Validation | id:8fb4675523ea1ffc1ce4fdece6460a1e313f6e32
 ./finances/models.py: Interest--not factored, factored proportionally, remaining (unique) | id:ae777062884810113ec263d417f5796109f9cdc7
-./finances-spa/src/Forms/AccountCreationForm.js: Create (unallocated) fund | id:b27bd6c983a32e7270826ea0727f409ecad4079b
 ./finances-spa/src/App.js: Update renderNav() | id:bccf48bdc179ccdbe53ead60e43015990d34827b
-./finances/models.py: PaymentSchedule.clean | id:c83cfbec352b5a146cc12571d2bca871d2999684
 ./packageScripts.sh: Copy build artifacts to development server | id:e65f07a9dfb9f5748a03b0dc6933a964ef152d66
 ./packageScripts.sh: initializeSandbox | id:eeea497bf96a3dde30200412b66d574810e9826c
+./finances-spa/src/Framework/Validator.js: Throw exception here | id:f3e2f17e131e66c28aaf594310baae142009dee7

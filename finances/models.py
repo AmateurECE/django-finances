@@ -2,25 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
 
-class PaymentSchedule(models.Model):
-    # TODO: Come up with a better BNF Grammar
-    # paymentSchedule := Every <_ordinal> <period> [and <_ordinal> <period>]
-    #                    starting on <_date>
-    # period := day,sunday-saturday,week,
-    schedule = models.CharField(max_length=200)
-    startDate = models.DateField()
-    duration = models.DurationField()
-    isForever = models.BooleanField()
-    transaction = models.OneToOneField(
-        'RecurringTransaction', on_delete=models.CASCADE)
-
-    def clean(self):
-        """Validate the schedule against our BNF grammar."""
-        # TODO: PaymentSchedule.clean
-
-    def __str__(self):
-        return self.schedule
-
 class Bank(models.Model):
     name = models.CharField(max_length=80)
 
@@ -35,7 +16,7 @@ class Account(models.Model):
         help_text=("The interest rate per period, in percent (NOTE: This is "
                    "neither APY nor APR)"))
     accountType = models.CharField(
-        max_length=80,
+        max_length=20,
         choices=[
             ('SAVINGS', 'Savings'),
             ('CHECKING', 'Checking'),
@@ -58,12 +39,9 @@ class Transaction(models.Model):
     description = models.CharField(max_length=80)
     amount = models.FloatField()
     fund = models.ForeignKey(Fund, on_delete=models.CASCADE)
+    date = models.DateField(default=datetime.now)
 
     def __str__(self):
         return self.description
 
-class NonRecurringTransaction(Transaction):
-    date = models.DateField(default=datetime.now)
-
-class RecurringTransaction(Transaction):
-    pass
+# TODO: ScheduledPayment Model

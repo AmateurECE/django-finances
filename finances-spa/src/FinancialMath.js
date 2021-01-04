@@ -7,7 +7,7 @@
 //
 // CREATED:         12/17/2020
 //
-// LAST EDITED:     12/17/2020
+// LAST EDITED:     01/04/2021
 ////
 
 export class InterestRate {
@@ -35,6 +35,16 @@ export class InterestRate {
         throw new Error('Unimplemented method: getPeriodic');
     }
 
+}
+
+export function GetYYYYMMDD() {
+    const today = new Date();
+    const date = today.getDate();
+    const month = today.getMonth() + 1;
+    return [today.getFullYear(),
+            (month > 9 ? '' : '0') + month,
+            (date > 9 ? '' : '0') + date
+           ].join('-');
 }
 
 ///////////////////////////////////////////////////////////////////////////////

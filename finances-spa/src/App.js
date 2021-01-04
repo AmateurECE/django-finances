@@ -7,7 +7,7 @@
 //
 // CREATED:         11/30/2020
 //
-// LAST EDITED:     12/30/2020
+// LAST EDITED:     01/04/2021
 ////
 
 import './App.scss';
@@ -71,20 +71,19 @@ export default class App extends React.Component {
         // First, attempt to retrieve the funds.
         Fund.collection.all().then(data => {
             this.funds = data;
-            if (data.length === 0) {
-                // If there are no funds, trigger FUND_SETUP. Retrieve accounts
+            return Account.collection.all();
+        }).then(data => {
+            this.accounts = data;
+            // If there are fewer funds than there are accounts (or zero
+            // accounts) trigger FUND_SETUP
+            if (this.funds.length === 0 || this.funds.length <= data.length) {
                 this.state.userSetup.unshift(FUND_SETUP);
-                return Account.collection.all().then(data => {
-                    this.accounts = data;
-                    // If there are no accounts, trigger ACCOUNT_SETUP.
-                    if (data.length === 0) {
-                        return Bank.collection.all().then(data => {
-                            this.banks = data;
-                            this.state.userSetup.unshift(ACCOUNT_SETUP);
-                        });
-                    }
-                    return {};
-                });
+            }
+
+            // If there are no accounts, trigger ACCOUNT_SETUP.
+            if (data.length === 0) {
+                this.state.userSetup.unshift(ACCOUNT_SETUP);
+                return Bank.collection.all().then(data => this.banks = data);
             }
             return {};
         }).catch(error => {

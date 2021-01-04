@@ -7,7 +7,7 @@
 //
 // CREATED:         12/17/2020
 //
-// LAST EDITED:     12/30/2020
+// LAST EDITED:     01/04/2021
 ////
 
 import React from 'react';
@@ -18,7 +18,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 // Models
 import Bank from '../Models/Bank.js';
 import Account from '../Models/Account.js';
-import {InterestRate} from '../FinancialMath.js';
+import Fund from '../Models/Fund.js';
+import Transaction from '../Models/Transaction.js';
+import {GetYYYYMMDD, InterestRate} from '../FinancialMath.js';
 
 export default class AccountCreationForm extends React.Component {
     constructor() {
@@ -26,7 +28,8 @@ export default class AccountCreationForm extends React.Component {
         this.state = {
             name: '',
             bank: '',
-            accountType: ''
+            accountType: '',
+            balance: 0
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,6 +37,7 @@ export default class AccountCreationForm extends React.Component {
         this.nameChange = this.handleChange.bind(this, 'name');
         this.bankChange = this.handleChange.bind(this, 'bank');
         this.accountTypeChange = this.handleChange.bind(this, 'accountType');
+        this.balanceChange = this.handleChange.bind(this, 'balance');
     }
 
     handleChange(key, event) {
@@ -65,13 +69,24 @@ export default class AccountCreationForm extends React.Component {
             //         this.state.interestRate);
             // }
 
-            // TODO: Create initial transaction for current balance
-            // TODO: Create (unallocated) fund
             Account.collection.create({
                 name: this.state.name,
                 bank: data.url,
                 periodicInterestRate,
                 accountType: this.state.accountType
+            }).then(account => {
+                return Fund.collection.create({
+                    account: account.url,
+                    description: `Unallocated (${this.state.name})`,
+                    target: 0
+                });
+            }).then(fund => {
+                return Transaction.collection.create({
+                    description: 'Initial balance for account creation',
+                    amount: this.state.balance,
+                    fund: fund.url,
+                    date: GetYYYYMMDD()
+                });
             }).then(this.props.onSubmit());
         };
         if (createNewBank) {
@@ -114,10 +129,10 @@ export default class AccountCreationForm extends React.Component {
                   <MenuItem value="CHECKING">Checking</MenuItem>
                   <MenuItem value="SAVINGS">Savings</MenuItem>
               </TextField>
-              {/* <label>Current Balance */}
-              {/*   <input type="number" name="currentBalance" step="0.01" */}
-              {/*          value={this.currentBalance} /> */}
-              {/* </label> */}
+              <TextField
+                label="Current Balance" name="balance" type="number"
+                value={this.state.balance} placeholder="Current Balance"
+                onChange={this.balanceChange} />
               <div className="submit-group">
                 <input className="btn" type="submit" value="Next"/>
               </div>

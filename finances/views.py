@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import serializers, viewsets
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from .models import Bank, Account, Fund
+from .models import Bank, Account, Fund, Transaction
 
 ##### Serializers define the API representation
 ## User Serializer
@@ -31,11 +31,18 @@ class FundSerializer(serializers.HyperlinkedModelSerializer):
         model = Fund
         fields = ['url', 'id', 'account', 'description', 'target']
 
+## Transaction Serializer
+class TransactionSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Transaction
+        fields = ['url', 'id', 'description', 'amount', 'fund', 'date']
+
 ###### ViewSets define the view behavior
 class UserViewSet(viewsets.ModelViewSet):
-    # TODO: Only get logged in user
-    queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def get_queryset(self):
+        return User.objects.filter(username=self.request.user.username)
 
 class BankViewSet(viewsets.ModelViewSet):
     queryset = Bank.objects.all()
@@ -50,6 +57,14 @@ class AccountViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 class FundViewSet(viewsets.ModelViewSet):
-    # TODO: Only get funds for logged in user
-    queryset = Fund.objects.all()
     serializer_class = FundSerializer
+
+    def get_queryset(self):
+        return Fund.objects.filter(account__user=self.request.user)
+
+class TransactionViewSet(viewsets.ModelViewSet):
+    serializer_class = TransactionSerializer
+
+    def get_queryset(self):
+        return Transaction.objects.filter(
+            fund__account__user=self.request.user)

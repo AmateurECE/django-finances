@@ -85,7 +85,7 @@ initializeSandbox() {
 }
 
 reapplyMigrations() {
-    python3 manage.py migrate finances zero
+    python3 manage.py migrate zero
     rm -rf finances/migrations
     python3 manage.py makemigrations finances
     python3 manage.py migrate
