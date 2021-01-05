@@ -21,6 +21,7 @@ import {
 import Account from './Models/Account.js';
 import Bank from './Models/Bank.js';
 import Fund from './Models/Fund.js';
+import Transaction from './Models/Transaction.js';
 
 import AccountCreationForm from './Forms/AccountCreationForm.js';
 import FundCreationForm from './Forms/FundCreationForm.js';
@@ -73,6 +74,9 @@ export default class App extends React.Component {
         // First, attempt to retrieve the funds.
         Fund.collection.all().then(data => {
             this.funds = data;
+            return Transaction.collection.all();
+        }).then(data => {
+            this.transactions = data;
             return Account.collection.all();
         }).then(data => {
             this.accounts = data;
@@ -134,7 +138,9 @@ export default class App extends React.Component {
 
               <Switch>
                 <Route path="/">
-                  <FundList funds={this.funds} accounts={this.accounts} />
+                  <FundList
+                    funds={this.funds} accounts={this.accounts}
+                    transactions={this.transactions} />
                 </Route>
               </Switch>
             </Router>

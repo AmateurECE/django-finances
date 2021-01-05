@@ -13,7 +13,7 @@
 import React from 'react';
 
 function Fund(props) {
-    const {description, account, target} = props.fund;
+    const {description, account, target, balance} = props.fund;
     return (
         <tr className="table-row">
           <td className="table-item fund-description">{description}</td>
@@ -21,7 +21,7 @@ function Fund(props) {
           {(target && <td className="table-item fund-target">{target}</td>)
            || <td className="table-item fund-target-null">N/A</td>}
           {/* TODO: Calculate fund balance (just not here) */}
-          <td className="table-item fund-balance">0</td>
+          <td className="table-item fund-balance">{balance}</td>
         </tr>
     );
 }
@@ -34,20 +34,22 @@ export default class FundList extends React.Component {
 
     componentDidMount() {
         // Fixup funds to give the account field a meaningful value
-        let displayFunds = [];
+        let displayFunds = {};
         this.props.funds.forEach(fund => {
+            const fixedFund = {url: fund.url, id: fund.id, balance: 0,
+                          description: fund.description, target: fund.target};
             for (let index in this.props.accounts) {
                 if (this.props.accounts[index].url === fund.account) {
-                    displayFunds.push({
-                        url: fund.url,
-                        id: fund.id,
-                        description: fund.description,
-                        target: fund.target,
-                        account: this.props.accounts[index].name
-                    });
+                    fixedFund.account = this.props.accounts[index].name;
+                    displayFunds[fixedFund.url] = fixedFund;
+                    break;
                 }
             }
         });
+
+        this.props.transactions.forEach(transaction =>
+            displayFunds[transaction.fund].balance += transaction.amount
+        );
         this.setState({displayFunds});
     }
 
@@ -65,8 +67,10 @@ export default class FundList extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.displayFunds.map(fund => (
-                      <Fund key={fund.id} fund={fund}/>
+                  {Object.keys(this.state.displayFunds).map(key => (
+                      <Fund
+                        key={this.state.displayFunds[key].id}
+                        fund={this.state.displayFunds[key]} />
                   ))}
                 </tbody>
               </table>
