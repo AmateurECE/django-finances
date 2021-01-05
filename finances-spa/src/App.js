@@ -7,7 +7,7 @@
 //
 // CREATED:         11/30/2020
 //
-// LAST EDITED:     01/04/2021
+// LAST EDITED:     01/05/2021
 ////
 
 import './App.scss';
@@ -24,6 +24,8 @@ import Fund from './Models/Fund.js';
 
 import AccountCreationForm from './Forms/AccountCreationForm.js';
 import FundCreationForm from './Forms/FundCreationForm.js';
+
+import FundList from './FundList.js';
 
 // This is the URL we redirect to when we detect invalid login credentials.
 const LOGIN_REDIRECT_URL = '/login/';
@@ -116,15 +118,15 @@ export default class App extends React.Component {
         );
     }
 
-    renderNav() {
+    renderMain() {
         // TODO: Update renderNav()
         return (
-            <Router>
+            <Router basename="finances">
               <div>
                 <nav>
                   <ul>
                     <li>
-                      <Link to="/">Home</Link>
+                      <Link to="/">Funds</Link>
                     </li>
                   </ul>
                 </nav>
@@ -132,15 +134,11 @@ export default class App extends React.Component {
 
               <Switch>
                 <Route path="/">
+                  <FundList funds={this.funds} accounts={this.accounts} />
                 </Route>
               </Switch>
             </Router>
         );
-    }
-
-    renderHomepage() {
-        // TODO: renderHomepage()
-        return (null);
     }
 
     render() {
@@ -150,7 +148,7 @@ export default class App extends React.Component {
         } else if (this.state.userSetup.length > 0) {
             page = this.renderUserSetup();
         } else {
-            page = this.renderHomepage();
+            page = this.renderMain();
         }
         return (
             <main>
