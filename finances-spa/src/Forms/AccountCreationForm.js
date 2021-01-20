@@ -7,7 +7,7 @@
 //
 // CREATED:         12/17/2020
 //
-// LAST EDITED:     01/04/2021
+// LAST EDITED:     01/06/2021
 ////
 
 import React from 'react';
@@ -75,22 +75,35 @@ export default class AccountCreationForm extends React.Component {
                 periodicInterestRate,
                 accountType: this.state.accountType
             }).then(account => {
+                this.account = new Account(account);
                 return Fund.collection.create({
                     account: account.url,
                     description: `Unallocated (${this.state.name})`,
                     target: 0
                 });
             }).then(fund => {
+                this.accountUnallocatedFund = new Fund(fund);
                 return Transaction.collection.create({
                     description: 'Initial balance for account creation',
                     amount: this.state.balance,
                     fund: fund.url,
                     date: GetYYYYMMDD()
                 });
-            }).then(this.props.onSubmit());
+            }).then(transaction => {
+                this.props.onDataUpdate(data => {
+                    data.accounts.push(this.account);
+                    data.funds.push(this.accountUnallocatedFund);
+                    data.transactions.push(new Transaction(transaction));
+                });
+                this.props.onSubmit();
+            });
         };
         if (createNewBank) {
-            Bank.collection.create({name: this.state.bank}).then(makeAccount);
+            Bank.collection.create({name: this.state.bank}).then(data => {
+                this.props.onDataUpdate(data =>
+                    data.banks.push(new Bank(data)));
+                makeAccount(data);
+            });
         } else {
             makeAccount({url});
         }

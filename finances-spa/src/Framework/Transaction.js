@@ -8,7 +8,7 @@
 //
 // CREATED:         12/07/2020
 //
-// LAST EDITED:     12/29/2020
+// LAST EDITED:     01/05/2021
 ////
 
 import fetch from 'node-fetch';
@@ -93,7 +93,7 @@ export class DeleteTransaction extends Transaction {
         super(url, undefined, authenticator);
         this.completeFunction =
             async (url, data=undefined, authenticator=undefined) => {
-                let headers = {Accept: 'application/json'};
+                let headers = {};
                 authenticator.installHeader(headers);
                 return await doFetch(url, 'DELETE', headers);
             };

@@ -42,24 +42,6 @@ main {
     border-bottom: 2px solid var(--green) !important;
 }
 
-.initializer-form {
-    margin-top: 5rem;
-    padding: 1.5rem;
-    background-color: var(--green);
-    border-radius: 15px;
-    border: 0px solid;
-}
-
-.submit-group {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.btn {
-    padding: 0.5rem 2rem;
-    font-size: 1rem;
-}
-
 footer p {
     margin: 0.3rem 0;
     text-align: center;
@@ -145,7 +127,6 @@ td {
         color: white;
         border: none;
         border-radius: 4px;
-        margin-top: 0.5rem;
     }
 }
 
@@ -153,6 +134,17 @@ td {
     .initializer-form {
         max-width: 40rem;
     }
+}
+
+/******************************************************************************
+ * Icons
+ ***/
+
+.delete-icon { background: url('images/trash.svg') center center/cover; }
+
+@media(prefers-color-scheme: dark) {
+    .delete-icon {
+        background: url('images/trash-fill.svg') center center/cover; }
 }
 
 /******************************************************************************
@@ -167,3 +159,35 @@ td {
 .fund-target:before, .fund-balance:before {
     content: '$';
 }
+
+.initializer-form {
+    margin-top: 5rem;
+    padding: 1.5rem;
+    background-color: var(--green);
+    border-radius: 15px;
+    border: 0px solid;
+}
+
+.modal-form {
+    margin: auto;
+    margin-top: 5rem;
+    padding: 0.5rem;
+    background-color: var(--dark-gray);
+    border-radius: 3px;
+    max-width: 568px;
+}
+
+.submit-group {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn {
+    display: flex;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.p-sm { padding: 0.2rem; }
+.p-wide { padding: 0.5rem 2rem; }
+.mt-m { margin-top: 0.5rem; }

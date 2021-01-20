@@ -7,7 +7,7 @@
 //
 // CREATED:         12/30/2020
 //
-// LAST EDITED:     12/30/2020
+// LAST EDITED:     01/06/2021
 ////
 
 import React from 'react';
@@ -42,8 +42,11 @@ export default class FundCreationForm extends React.Component {
         Fund.collection.create({
             description: this.state.description,
             account: this.state.account,
-            target: this.state.target
-        }).then(this.props.onSubmit());
+            target: parseFloat(this.state.target)
+        }).then(fund => {
+            this.props.onDataUpdate(data => data.funds.push(new Fund(fund)));
+            this.props.onSubmit();
+        });
 
         event.preventDefault();
     }

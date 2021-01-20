@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import datetime
+from datetime import datetime, date
 
 class Bank(models.Model):
     name = models.CharField(max_length=80)
@@ -29,7 +29,7 @@ class Account(models.Model):
 class Fund(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     description = models.CharField(max_length=80, blank=True, null=True)
-    target = models.IntegerField(blank=True, null=True)
+    target = models.FloatField(blank=True, null=True)
     # TODO: Interest--not factored, factored proportionally, remaining (unique)
 
     def __str__(self):
@@ -39,7 +39,7 @@ class Transaction(models.Model):
     description = models.CharField(max_length=80)
     amount = models.FloatField()
     fund = models.ForeignKey(Fund, on_delete=models.CASCADE)
-    date = models.DateField(default=datetime.now)
+    date = models.DateField(default=date.today)
 
     def __str__(self):
         return self.description

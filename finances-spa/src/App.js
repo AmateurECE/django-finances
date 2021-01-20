@@ -7,7 +7,7 @@
 //
 // CREATED:         11/30/2020
 //
-// LAST EDITED:     01/05/2021
+// LAST EDITED:     01/12/2021
 ////
 
 import './App.scss';
@@ -39,11 +39,20 @@ export default class App extends React.Component {
         super();
         this.state = {
             ready: false,
-            userSetup: []
+            userSetup: [],
+            accounts: [],
+            funds: [],
+            transactions: [],
+            banks: []
         };
+
+        this.updateData = callback => this.setState(callback);
     }
 
     getFormFields(setup, callback) {
+        // TODO: Make these separate components
+        // TODO: Balances are doubled when loading FundList view right after
+        //       adding these funds
         if (ACCOUNT_SETUP === setup) {
             return (
                 <div className="">
@@ -51,8 +60,9 @@ export default class App extends React.Component {
                   <p>Before we begin, please tell me a little bit about your
                   existing bank accounts.</p>
                   <AccountCreationForm
+                    onDataUpdate={this.updateData}
                     onSubmit={callback}
-                    banks={this.banks} />
+                    banks={this.state.banks} />
                 </div>
             );
         } else if (FUND_SETUP === setup) {
@@ -61,8 +71,9 @@ export default class App extends React.Component {
                   <h1>Next, the Funds</h1>
                   <p>Now, tell me about something you're saving up for.</p>
                   <FundCreationForm
+                    onDataUpdate={this.updateData}
                     onSubmit={callback}
-                    accounts={this.accounts} />
+                    accounts={this.state.accounts} />
                 </div>
             );
         }
@@ -73,23 +84,26 @@ export default class App extends React.Component {
     componentDidMount() {
         // First, attempt to retrieve the funds.
         Fund.collection.all().then(data => {
-            this.funds = data;
+            this.setState(state => state.funds = data);
             return Transaction.collection.all();
         }).then(data => {
-            this.transactions = data;
+            this.setState(state => state.transactions = data);
             return Account.collection.all();
         }).then(data => {
-            this.accounts = data;
+            this.setState(state => state.accounts = data);
             // If there are fewer funds than there are accounts (or zero
             // accounts) trigger FUND_SETUP
-            if (this.funds.length === 0 || this.funds.length <= data.length) {
+            if (this.state.funds.length === 0
+                || this.state.funds.length <= data.length) {
                 this.state.userSetup.unshift(FUND_SETUP);
             }
 
             // If there are no accounts, trigger ACCOUNT_SETUP.
             if (data.length === 0) {
                 this.state.userSetup.unshift(ACCOUNT_SETUP);
-                return Bank.collection.all().then(data => this.banks = data);
+                return Bank.collection.all().then(
+                    data => this.setState(state => state.banks = data)
+                );
             }
             return {};
         }).catch(error => {
@@ -139,8 +153,9 @@ export default class App extends React.Component {
               <Switch>
                 <Route path="/">
                   <FundList
-                    funds={this.funds} accounts={this.accounts}
-                    transactions={this.transactions} />
+                    funds={this.state.funds} accounts={this.state.accounts}
+                    transactions={this.state.transactions}
+                    onDataUpdate={this.updateData} />
                 </Route>
               </Switch>
             </Router>
