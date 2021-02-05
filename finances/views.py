@@ -3,6 +3,18 @@ from rest_framework import serializers, viewsets
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .models import Bank, Account, Fund, Transaction
+from django.conf import settings
+
+importClass = lambda class_: \
+    getattr(__import__('.'.join(class_.split('.')[:-1]),
+                       fromlist=[class_.split('.')[-1]]),
+            class_.split('.')[-1]) if isinstance(class_, str) else class_
+AUTHENTICATION_CLASSES = [
+    importClass(class_)
+    for class_ in settings.FINANCES_SETTINGS['DEFAULT_AUTHENTICATION_CLASSES']]
+PERMISSION_CLASSES = [
+    importClass(class_)
+    for class_ in settings.FINANCES_SETTINGS['DEFAULT_PERMISSION_CLASSES']]
 
 ##### Serializers define the API representation
 ## User Serializer
@@ -40,6 +52,8 @@ class TransactionSerializer(serializers.HyperlinkedModelSerializer):
 ###### ViewSets define the view behavior
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
+    authentication_classes = AUTHENTICATION_CLASSES
+    permission_classes = PERMISSION_CLASSES
 
     def get_queryset(self):
         return User.objects.filter(username=self.request.user.username)
@@ -47,9 +61,13 @@ class UserViewSet(viewsets.ModelViewSet):
 class BankViewSet(viewsets.ModelViewSet):
     queryset = Bank.objects.all()
     serializer_class = BankSerializer
+    authentication_classes = AUTHENTICATION_CLASSES
+    permission_classes = PERMISSION_CLASSES
 
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
+    authentication_classes = AUTHENTICATION_CLASSES
+    permission_classes = PERMISSION_CLASSES
     def get_queryset(self):
         return Account.objects.filter(user=self.request.user)
 
@@ -58,12 +76,16 @@ class AccountViewSet(viewsets.ModelViewSet):
 
 class FundViewSet(viewsets.ModelViewSet):
     serializer_class = FundSerializer
+    authentication_classes = AUTHENTICATION_CLASSES
+    permission_classes = PERMISSION_CLASSES
 
     def get_queryset(self):
         return Fund.objects.filter(account__user=self.request.user)
 
 class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
+    authentication_classes = AUTHENTICATION_CLASSES
+    permission_classes = PERMISSION_CLASSES
 
     def get_queryset(self):
         return Transaction.objects.filter(

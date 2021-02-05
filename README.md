@@ -22,12 +22,17 @@ INSTALLED_APPS = [
     ...
 ]
 ```
-* Set the API Permissions by adding this code anywhere in your project's
-`settings.py` file:
+* Set the API Permissions by adding this code in your `settings.py` file. Any
+permission classes can be used, or any strings. The following uses Django
+Simple JWT and the built-in Django Session Authentication.
 ```
-REST_FRAMEWORK = {
+FINANCES_SETTINGS = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ]
 }
 ```

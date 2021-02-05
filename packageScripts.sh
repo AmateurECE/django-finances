@@ -8,17 +8,17 @@
 #
 # CREATED:          11/28/2020
 #
-# LAST EDITED:      12/30/2020
+# LAST EDITED:      02/04/2021
 ###
 
 read -r -d '' USAGE <<EOF
 Usage: packageScripts.sh <command>
 
 Commands:
-  package                Run the full packaging procedure and upload the wheels
+  upload                 Run the full packaging procedure and upload the wheels
                          archive to the PyPI server
-  buildSpa               Build the SPA and copy the build artifacts to the
-                         Django app (executed by 'package' command)
+  build                  Build the SPA and copy the build artifacts to the
+                         Django app (executed by 'upload' command)
   testServer             Spin up a test server using the django test server and
                          the Nginx docker image. With --fixture, uses the test
                          fixture fixtures/empty.json.bz2.
@@ -37,24 +37,27 @@ usage() {
     printf '%s\n' "$USAGE"
 }
 
-package() {
-    # TODO: Check package to make sure no unnecessary files exist
-    python3 setup.py sdist
+USER=edtwardy
+SERVER=edtwardy.hopto.org
+PORT=5000
+LOCATION=/var/www/$SERVER/pypi/django-finances/
 
+upload() {
     printf '%s\n  %s\n    %s\n' "<!doctype html>" "<html>" "<body>" >index.html
     for file in `find dist django_finances.egg-info -type f`; do
         printf '      <a href="%s">%s</a>\n' $file $file >>index.html
     done
     printf '  %s\n%s\n' "</body>" "</html>" >>index.html
 
-    directory=/var/www/edtwardy.hopto.org/pypi/django-finances/
-    rsync -e 'ssh -p 5000' -rv --delete dist django_finances.egg-info \
-          index.html edtwardy@edtwardy.hopto.org:$directory
+    rsync -e "ssh -p $PORT" -rv --delete dist django_finances.egg-info \
+          index.html $USER@$SERVER:$LOCATION
 }
 
-buildSpa() {
-    cd finances-spa && npm run build
-    # TODO: Copy build artifacts to development server
+build() {
+    (cd finances-spa && npm run build)
+    mkdir -p finances/static
+    cp -a finances-spa/build/ finances/static/finances
+    python3 setup.py sdist
 }
 
 testServer() {
@@ -116,11 +119,11 @@ fi
 command=$1
 shift
 case $command in
-    package)
-        package
+    upload)
+        upload
         ;;
-    buildSpa)
-        buildSpa
+    build)
+        build
         ;;
     testServer)
         testServer $@
